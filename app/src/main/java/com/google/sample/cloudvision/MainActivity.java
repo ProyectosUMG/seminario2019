@@ -31,6 +31,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mImageDetails;
     private ImageView mMainImage;
-
+    private Button btnTienda;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,17 @@ public class MainActivity extends AppCompatActivity {
 
         mImageDetails = findViewById(R.id.image_details);
         mMainImage = findViewById(R.id.main_image);
+        btnTienda = findViewById(R.id.agregar_usuario);
+        btnTienda.setVisibility(View.GONE);
+        btnTienda.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                TextView txt = findViewById(R.id.image_details);
+                Uri uri = Uri.parse("https://www.medinfo.com.gt/?s=" + txt.getText() + "&post_type=product&type_aws=true");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
     }
 
     public void startGalleryChooser() {
@@ -275,6 +288,8 @@ public class MainActivity extends AppCompatActivity {
             if (activity != null && !activity.isFinishing()) {
                 TextView imageDetail = activity.findViewById(R.id.image_details);
                 imageDetail.setText(result);
+                Button btn = activity.findViewById(R.id.agregar_usuario);
+                btn.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -314,13 +329,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
-        StringBuilder message = new StringBuilder("Esto es lo que encontre:\n\n");
+        StringBuilder message = new StringBuilder();
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
-                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
+                message.append(label.getDescription());
                 message.append("\n");
+
+                break;
             }
         } else {
             message.append("nothing");
