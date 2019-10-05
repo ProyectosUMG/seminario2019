@@ -172,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
     public void uploadImage(Uri uri) {
         if (uri != null) {
             try {
+
+                Button btn = findViewById(R.id.agregar_usuario);
+                btn.setVisibility(View.GONE);
                 // scale the image to save on bandwidth
                 Bitmap bitmap =
                         scaleBitmapDown(
@@ -285,10 +288,12 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             MainActivity activity = mActivityWeakReference.get();
+            Button btn = activity.findViewById(R.id.agregar_usuario);
+            btn.setVisibility(View.GONE);
             if (activity != null && !activity.isFinishing()) {
                 TextView imageDetail = activity.findViewById(R.id.image_details);
                 imageDetail.setText(result);
-                Button btn = activity.findViewById(R.id.agregar_usuario);
+
                 btn.setVisibility(View.VISIBLE);
             }
         }
@@ -332,12 +337,18 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder message = new StringBuilder();
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
+        int i = 0;
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 message.append(label.getDescription());
+                i++;
+                if(i == 2)
+                {
+                    break;
+                }
+                message.append(", ");
                 message.append("\n");
 
-                break;
             }
         } else {
             message.append("nothing");

@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:textSize="15dp"
                 android:text="Use el boton para seleccionar una imagen." />
 
             <ImageView
@@ -39,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/agregar"
+                android:textColor="@color/textoBlanco"
                 android:background="@color/colorBoton"/>
         </LinearLayout>
     </ScrollView>
